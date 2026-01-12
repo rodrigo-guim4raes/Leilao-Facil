@@ -122,7 +122,29 @@ public class listagemVIEW extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVenderActionPerformed
-       
+        String idTxt = id_produto_venda.getText();
+        
+        if(idTxt.isEmpty()){
+            javax.swing.JOptionPane.showMessageDialog(null, "Digite o ID do produto.");
+            return;
+        }
+        
+        try{
+            int id = Integer.parseInt(idTxt);
+            
+            ProdutosDAO produtosdao = new ProdutosDAO();
+            boolean ok = produtosdao.venderProduto(id);
+          
+            if (ok) {
+                javax.swing.JOptionPane.showMessageDialog(null, "Produto vendido com sucesso!");
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(null, "ID não encontrado ou produto já vendido.");
+            }
+            
+            listarProdutos();
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(null, "ID inválido. Digite um número.");
+        }
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
@@ -130,7 +152,7 @@ public class listagemVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVendasActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
-        
+        this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     public static void main(String args[]) {
@@ -156,7 +178,24 @@ public class listagemVIEW extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void listarProdutos(){
-        
+        try {
+            ProdutosDAO produtosdao = new ProdutosDAO();
+            
+            DefaultTableModel model = (DefaultTableModel) listaProdutos.getModel();
+            model.setNumRows(0);
+            
+            ArrayList<ProdutosDTO> listagem = produtosdao.listarProdutos();
+            
+            for(int i = 0; i < listagem.size(); i++){
+                model.addRow(new Object[]{
+                    listagem.get(i).getId(),
+                    listagem.get(i).getNome(),
+                    listagem.get(i).getValor(),
+                    listagem.get(i).getStatus()
+                });
+            }
+        } catch (Exception e) {
+        }
     
     }
 }

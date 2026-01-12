@@ -52,6 +52,24 @@ public class ProdutosDAO {
 
         return listagem;
     }
+    
+    public boolean venderProduto(int id) {
+        String sql = "UPDATE produtos SET status = ? WHERE id = ?";                
+
+        try (Connection conn = new conectaDAO().conectaBD();
+            PreparedStatement prep = conn.prepareStatement(sql);){                
+                
+            prep.setString(1, "Vendido");
+            prep.setInt(2, id);
+                
+            int linhasAfetadas = prep.executeUpdate();
+            return linhasAfetadas > 0;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao vender produto: " + e.getMessage());
+            return false;
+        }
+    }
+
 }
 
 
