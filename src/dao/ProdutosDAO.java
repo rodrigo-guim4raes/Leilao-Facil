@@ -1,0 +1,57 @@
+package dao;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+
+
+public class ProdutosDAO {
+
+    public boolean cadastrarProduto(ProdutosDTO produto) {
+        String sql = "INSERT INTO produtos (nome, valor, status) VALUES (?, ?, ?)";
+
+        try (Connection conn = new conectaDAO().conectaBD();
+             PreparedStatement prep = conn.prepareStatement(sql)) {
+
+            prep.setString(1, produto.getNome());
+            prep.setInt(2, produto.getValor());
+            prep.setString(3, produto.getStatus());
+
+            int linhasAfetadas = prep.executeUpdate();
+            return linhasAfetadas > 0;
+
+        } catch (SQLException e) {           
+            JOptionPane.showMessageDialog(null, "Erro no cadastro: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public ArrayList<ProdutosDTO> listarProdutos() {
+        String sql = "SELECT id, nome, valor, status FROM produtos ORDER BY id DESC";
+        ArrayList<ProdutosDTO> listagem = new ArrayList<>();
+
+        try (Connection conn = new conectaDAO().conectaBD();
+             PreparedStatement prep = conn.prepareStatement(sql);
+             ResultSet rs = prep.executeQuery()) {
+
+            while (rs.next()) {
+                ProdutosDTO p = new ProdutosDTO();
+                p.setId(rs.getInt("id"));
+                p.setNome(rs.getString("nome"));
+                p.setValor(rs.getInt("valor"));
+                p.setStatus(rs.getString("status"));
+                listagem.add(p);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar produtos: " + e.getMessage());
+        }
+
+        return listagem;
+    }
+}
+
+

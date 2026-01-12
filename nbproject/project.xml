@@ -3,11 +3,7 @@
     <type>org.netbeans.modules.java.j2seproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/j2se-project/3">
-<<<<<<< HEAD
             <name>LeiloesTDSat</name>
-=======
-            <name>leilaoFacil</name>
->>>>>>> bfbb8bacd6d1ec5aea97cc1076fb00137dbc27b2
             <source-roots>
                 <root id="src.dir"/>
             </source-roots>
